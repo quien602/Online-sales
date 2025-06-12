@@ -1,0 +1,98 @@
+﻿@model Webbanhangonline.Models.EF.TaiKhoan
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/Admin/HomeAdmin" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/Admin/TaiKhoan" class="nav-link">Tài khoản</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="#" class="nav-link">Cập nhật</a>
+        </li>
+    </ul>
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Cập nhật tài khoản</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Tài khoản</a></li>
+                    <li class="breadcrumb-item active">Cập nhật</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Thông tin thêm mới</h3>
+        </div>
+        <div class="card-body">
+            <div class="bs-stepper-content">
+                @using (Html.BeginForm("Edit", "TaiKhoan", FormMethod.Post, new { }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @Html.HiddenFor(x => x.MaTaiKhoan)
+                    <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
+                        <div class="form-group">
+                            <label for="TenDangNhap">Tên đăng nhập</label>
+                            @Html.TextBoxFor(x => x.TenDangNhap, new { @class = "form-control", @placeholder = "Tên đăng nhập", id = "TenDangNhap" })
+                            @Html.ValidationMessageFor(x => x.TenDangNhap, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="MatKhau">Mật khẩu</label>
+                            @Html.TextBoxFor(x => x.MatKhau, new { @class = "form-control", @placeholder = "Mật khẩu", id = "MatKhau" })
+                            @Html.ValidationMessageFor(x => x.MatKhau, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="HoTen">Họ tên</label>
+                            @Html.TextBoxFor(x => x.HoTen, new { @class = "form-control", @placeholder = "Họ tên", id = "HoTen" })
+                            @Html.ValidationMessageFor(x => x.HoTen, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="SoDienThoai">Số điện thoại</label>
+                            @Html.TextBoxFor(x => x.SoDienThoai, new { @class = "form-control", @placeholder = "Số điện thoại", id = "SoDienThoai" })
+                            @Html.ValidationMessageFor(x => x.SoDienThoai, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="Email">Email</label>
+                            @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "Email", id = "Email" })
+                            @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="selectedMaQuyen">Quyền</label>
+                            @Html.DropDownList("selectedMaQuyen", ViewBag.MaQuyen as SelectList, "Select Permission", new { @class = "form-control" })
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+    </div>
+    <!-- /.card-footer-->
+    <!-- /.card -->
+</section>
+<!-- /.content -->

@@ -1,0 +1,148 @@
+﻿@model IEnumerable<Webbanhangonline.Models.EF.TaiKhoan>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Quản lý tài khoản</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Tài khoản</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        @*<li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="/admin" role="button"><i class="fas fa-bars"></i></a>
+            </li>*@
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/Admin/HomeAdmin" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/Admin/TaiKhoan" class="nav-link">Tài khoản</a>
+        </li>
+    </ul>
+}
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Danh sách tài khoản</h3>
+            <div class="card-tools">
+                <a href="/Admin/TaiKhoan/Create" class="btn btn-primary">Thêm mới</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Mã tài khản</th>
+                        <th>Họ tên</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        var i = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr id="trow_@item.MaTaiKhoan">
+                                <td>@item.MaTaiKhoan</td>
+                                <td>@item.HoTen</td>
+                                <td>
+                                    <a href="@Url.Action("Edit", "TaiKhoan", new { MaTaiKhoan = item.MaTaiKhoan })" class="btn btn-sm btn-primary">Sửa</a>
+                                    <a href="#" class="btn btn-sm btn-danger btnDelete" data-id="@item.MaTaiKhoan">Xóa</a>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">Không có bản ghi nào</td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col-6" style="text-align:right">
+                    @if (ViewBag.Page > 1)
+                    {
+                        <a href="@Url.Action("Index", new { page = ViewBag.Page - 1 })">&#9664;</a>
+                    }
+
+                    Page @ViewBag.Page
+
+                    @{
+                        int itemCount = Model.Count(); // Get the count of items in the model
+                    }
+
+                    @if (itemCount >= ViewBag.PageSize)
+                    {
+                        <a href="@Url.Action("Index", new { page = ViewBag.Page + 1 })">&#9654;</a>
+                    }
+                </div>
+
+            </div>
+        </div>
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+
+
+@section scripts{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '.btnDelete', function () {
+                var MaTaiKhoan = $(this).data("id"); // Retrieve MaDM from data-id attribute
+                var conf = confirm('Bạn có muốn xóa bản ghi này không');
+                if (conf === true) {
+                    $.ajax({
+                        url: '/Admin/TaiKhoan/Delete', // Correct URL to match the controller action
+                        type: 'POST',
+                        data: { MaTaiKhoan: MaTaiKhoan }, // Send MaDM as data
+                        success: function (rs) {
+                            if (rs.success) {
+                                $('#trow_' + MaTaiKhoan).remove(); // Remove the corresponding row
+                            } else {
+                                alert('Xóa không thành công'); // Show error message if deletion fails
+                            }
+                        },
+                        error: function () {
+                            alert('Đã xảy ra lỗi'); // Show error message if AJAX request fails
+                        }
+                    })
+                }
+            });
+        });
+    </script>
+}

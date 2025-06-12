@@ -1,0 +1,138 @@
+﻿@model Webbanhangonline.Models.EF.NhanVien
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css">
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        @*<li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="/admin" role="button"><i class="fas fa-bars"></i></a>
+            </li>*@
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/Admin/HomeAdmin" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/Admin/NhanVien" class="nav-link">Danh sách nhân viên</a>
+        </li>
+    </ul>
+}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Thêm mới nhân viên</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Nhân viên</a></li>
+                    <li class="breadcrumb-item active">Thêm mới</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Thông tin thêm mới</h3>
+
+
+    </div>
+    <div class="card-body">
+        <div class="bs-stepper-content">
+            @using (Html.BeginForm("Add", "NhanVien", FormMethod.Post, new { }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                <!-- your steps content here -->
+            <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Tên khách hàng</label>
+                    @Html.TextBoxFor(x => x.HoTen, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.HoTen, null, new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Tên đăng nhập</label>
+                    @Html.TextBoxFor(x => x.TenDangNhap, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.TenDangNhap, null, new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Mật khẩu</label>
+                    @Html.TextBoxFor(x => x.MatKhau, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.MatKhau, null, new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Ngày sinh</label>
+                    <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                        @Html.TextBoxFor(x => x.NgaySinh, new { @class = "form-control datetimepicker-input", @data_target = "#reservationdate" })
+                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(x => x.NgaySinh, null, new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Căn cước công dân</label>
+                    @Html.TextBoxFor(x => x.CCCD, new { @class = "form-control", @id = "txtDetail" })
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Số điện thoại</label>
+                    @Html.TextBoxFor(x => x.SoDienThoai, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Địa chỉ</label>
+                    @Html.TextBoxFor(x => x.DiaChi, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <a href="/admin/customer" class="btn btn-danger">Quay lại</a>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+            }
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <!-- Include Bootstrap CSS and JS -->
+    <!-- Bootstrap CSS and JS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!-- Tempus Dominus CSS and JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#reservationdate').datetimepicker({
+                format: 'DD/MM/yyyy',
+                icons: {
+                    time: 'fa fa-clock',
+                    date: 'fa fa-calendar',
+                    up: 'fa fa-chevron-up',
+                    down: 'fa fa-chevron-down',
+                    previous: 'fa fa-chevron-left',
+                    next: 'fa fa-chevron-right',
+                    today: 'fa fa-calendar-check-o',
+                    clear: 'fa fa-trash',
+                    close: 'fa fa-times'
+                }
+            });
+        });
+    </script>
+    <script>
+        document.getElementById("customercode").value = "YourGeneratedCode";
+    </script>
+}
+

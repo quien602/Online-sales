@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Webbanhangonline.Models.EF.CTPhieuNhap>
+
+@{
+    decimal totalPrice = 0;
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Giá gốc</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            var item = Model.ElementAt(i);
+            totalPrice += item.GiaGoc * item.SoLuong;
+            <tr>
+                <td>@item.MaSP</td>
+                <td>
+                    <input type="hidden" name="ProductDetails[@i].MaSP" value="@item.MaSP" />
+                    <input type="hidden" name="ProductDetails[@i].GiaGoc" value="@item.GiaGoc" />
+                    <input type="number" name="ProductDetails[@i].SoLuong" value="@item.SoLuong" class="form-control quantity" data-gia="@item.GiaGoc" onchange="updateTotalPrice()" />
+                </td>
+                <td>@item.GiaGoc</td>
+                <td><button type="button" class="btn btn-danger btn-remove">Xóa</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+function updateTotalPrice() {
+    var totalPrice = 0;
+    document.querySelectorAll('.quantity').forEach(function (element) {
+        var quantity = parseFloat(element.value);
+        var price = parseFloat(element.getAttribute('data-gia'));
+        if (!isNaN(quantity) && !isNaN(price)) {
+            totalPrice += quantity * price;
+        }
+    });
+    document.getElementById('Tongtien').value = totalPrice;
+}
+
+// Gọi hàm này để tính tổng tiền ban đầu khi trang được tải
+updateTotalPrice();
+</script>

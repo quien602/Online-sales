@@ -1,0 +1,246 @@
+﻿@model IEnumerable<Webbanhangonline.Models.EF.PhieuNhap>
+
+@{
+    ViewBag.Title = "Phiếu nhập";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        @*<li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="/admin" role="button"><i class="fas fa-bars"></i></a>
+            </li>*@
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/Admin/HomeAdmin" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/Admin/PhieuNhap" class="nav-link">@ViewBag.Title</a>
+        </li>
+    </ul>
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Quản lý phiếu nhập</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">@ViewBag.Title</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Danh sách phiếu nhập</h3>
+            <div class="card-tools">
+                <a href="/Admin/PhieuNhap/Add" class="btn btn-primary">Thêm mới</a>
+                <a href="#" class="btn btn-danger" id="BtnDeleteAll">Xóa</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="SelectAll" /></th>
+                        <th>Mã phiếu nhập</th>
+                        <th>Tên phiếu nhập</th>
+                        <th>Tổng tiền</th>
+                        <th>Ngày nhập</th>
+                        <th>TT</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        var i = 1;
+                        foreach (var item in Model)
+                        {
+                            var strCheck = item.TrangThai ? "<i class='fas fa-lock' style='color: #000000;'></i>" : "<i class='fas fa-lock-open' style='color: #000000;'></i>";
+
+                            <tr id="trow_@item.MaPN">
+                                <td><input type="checkbox" id="cbkItem" value="@item.MaPN" /></td>
+                                <td>@item.MaPN</td>
+                                <td>@item.TenPN</td>
+                                <td>@item.Tongtien</td>
+                                <td>@item.NgayNhap</td>
+                                <th align="center">
+                                    <a href="@Url.Action("TrangThai", "PhieuNhap", new { MaPN = item.MaPN })" class="btnActive">@Html.Raw(strCheck)</a>
+                                </th>
+                                <td>
+                                    @if (item.TrangThai)
+                                    {
+                                        <a href="@Url.Action("See", "PhieuNhap", new { MaPN = item.MaPN })" class="btn btn-sm btn-warning"><i class="fa-solid fa-eye" style="color: #000000;"></i></a>
+
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("Edit", "PhieuNhap", new { MaPN = item.MaPN })" class="btn btn-sm btn-primary">Sửa</a>
+                                    }
+                                    <a href="javascript:void(0);" data-id="@item.MaPN" class="btn btn-sm btn-danger btnDelete">Xóa</a>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7">Không có bản ghi nào</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col-6" style="text-align:right">
+                    @if (ViewBag.Page > 1)
+                    {
+                        <a href="@Url.Action("Index", new { page = ViewBag.Page - 1 })">&#9664;</a>
+                    }
+
+                    Page @ViewBag.Page
+
+                    @if (Model.Count() >= ViewBag.PageSize)
+                    {
+                        <a href="@Url.Action("Index", new { page = ViewBag.Page + 1 })">&#9654;</a>
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+
+
+
+@section scripts{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '#BtnDeleteAll', function (e) {
+                e.preventDefault();
+                var str = "";
+                var checkbox = $(this).closest('.card').find('tr td input[type="checkbox"]:checked');
+
+                checkbox.each(function () {
+                    var _id = $(this).val();
+                    if (str.length === 0) {
+                        str += _id;
+                    } else {
+                        str += "," + _id;
+                    }
+                });
+
+                if (str.length > 0) {
+                    var conf = confirm('Bạn có muốn xóa các bản ghi này không?');
+                    if (conf === true) {
+                        $.ajax({
+                            url: '/Admin/PhieuNhap/DeleteAll',
+                            type: 'POST',
+                            data: { ids: str },
+                            success: function (rs) {
+                                if (rs.success) {
+                                    location.reload();
+                                } else {
+                                    alert('Failed to delete records.');
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText); // Log detailed error message
+                                alert('An error occurred while processing your request.');
+                            }
+                        });
+                    }
+                } else {
+                    alert('Vui lòng chọn ít nhất một bản ghi để xóa.');
+                }
+            });
+
+
+
+            $('body').on('change', '#SelectAll', function () {
+                var checkStatus = this.checked;
+                var checkbox = $(this).parents('.card-body').find('tr td input:checkbox');
+                checkbox.each(function () {
+                    this.checked = checkStatus;
+                    if (this.checked) {
+                        checkbox.attr('selected', 'checked');
+                    } else {
+                        checkbox.attr('selected', '');
+                    }
+                });
+            });
+
+            $(document).ready(function () {
+                $('body').on('click', '.btnDelete', function () {
+                    var MaPN = $(this).data("id");
+                    var conf = confirm('Bạn có muốn xóa bản ghi này không');
+                    if (conf === true) {
+                        $.ajax({
+                            url: '/Admin/PhieuNhap/Delete',
+                            type: 'POST',
+                            data: { MaPN: MaPN },
+                            success: function (rs) {
+                                if (rs.success) {
+                                    $('#trow_' + MaPN).remove();
+                                } else {
+                                    alert('Xóa không thành công');
+                                }
+                            },
+                            error: function () {
+                                alert('Đã xảy ra lỗi');
+                            }
+                        });
+                    }
+                });
+            });
+
+
+
+            $('body').on('click', '.btnActive', function (e) {
+                e.preventDefault();
+                var btn = $(this);
+                var url = btn.attr('href'); // Lấy URL từ href của thẻ <a>
+                $.ajax({
+                    url: url, // Sử dụng URL lấy từ href
+                    type: 'POST',
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.TrangThai) {
+                                btn.html("<i class='fas fa-lock' style='color: #000000;'></i>");
+                            } else {
+                                btn.html("<i class='fas fa-lock-open' style='color: #000000;'></i>");
+                            }
+                        }
+                    }
+                });
+            });
+
+
+
+
+
+        });
+    </script>
+}
+

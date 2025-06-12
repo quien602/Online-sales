@@ -1,0 +1,117 @@
+﻿@model Webbanhangonline.Models.EF.NhanVien
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/Admin/HomeAdmin" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/Admin/NhanVien" class="nav-link">Nhân viên</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="#" class="nav-link">Cập nhật</a>
+        </li>
+    </ul>
+}
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Cập nhật nhân viên</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Danh mục</a></li>
+                    <li class="breadcrumb-item active">Cập nhật</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Thông tin</h3>
+
+
+        </div>
+        <div class="card-body">
+            <div class="bs-stepper-content">
+                @using (Html.BeginForm("Edit", "NhanVien", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    @Html.HiddenFor(model => model.MaNV)
+                    @Html.HiddenFor(model => model.MaTaiKhoan)
+
+                    <div class="form-group">
+                        <label for="HoTen">Full Name</label>
+                        @Html.TextBoxFor(model => model.HoTen, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.HoTen)
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CCCD">CCCD</label>
+                        @Html.TextBoxFor(model => model.CCCD, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CCCD)
+                    </div>
+
+                    <div class="form-group">
+                        <label for="NgaySinh">Date of Birth</label>
+                        @Html.TextBoxFor(model => model.NgaySinh, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
+                        @Html.ValidationMessageFor(model => model.NgaySinh)
+                    </div>
+
+                    <div class="form-group">
+                        <label for="SoDienThoai">Address</label>
+                        @Html.TextBoxFor(model => model.SoDienThoai, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.SoDienThoai)
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DiaChi">Phone Number</label>
+                        @Html.TextBoxFor(model => model.DiaChi, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DiaChi)
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TenDangNhap">Username</label>
+                        @Html.TextBoxFor(model => model.TenDangNhap, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TenDangNhap)
+                    </div>
+
+                    <div class="form-group">
+                        <label for="MatKhau">Password</label>
+                        @Html.PasswordFor(model => model.MatKhau, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.MatKhau)
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save</button>
+                }
+
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+    </div>
+    <!-- /.card-footer-->
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->

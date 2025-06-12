@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Webbanhangonline.Models.EF.SanPham>
+
+<h4>Chi tiết phiếu nhập</h4>
+<div style="max-height: 300px; overflow-y: auto;">
+    <table class="table table-bordered" id="productTable">
+        <thead>
+            <tr align="center">
+                <th>Sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Giá nhập</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <select name="ProductDetails[0].MaSP" class="form-control product-dropdown">
+                        <option>Chọn sản phẩm</option>
+                        @foreach (var item in ViewBag.Products)
+                        {
+                            <option value="@item.MaSP" data-price="@item.GiaGoc">@item.TenSP</option>
+                        }
+                    </select>
+                </td>
+                <td><input type="number" name="ProductDetails[0].SoLuong" class="form-control quantity" /></td>
+                <td><input type="number" name="ProductDetails[0].GiaGoc" class="form-control price" readonly /></td>
+                <td><button type="button" class="btn btn-danger btn-remove">Xóa</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<button type="button" class="btn btn-success" id="addProductRow">Thêm sản phẩm</button>
+<br />
+<br />
+

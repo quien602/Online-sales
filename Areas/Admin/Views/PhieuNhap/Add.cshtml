@@ -1,0 +1,177 @@
+﻿@model Webbanhangonline.Models.EF.PhieuNhap
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/Admin/HomeAdmin" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/Admin/PhieuNhap" class="nav-link">Danh mục phiếu nhập</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="#" class="nav-link">Thêm mới</a>
+        </li>
+    </ul>
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Thêm mới phiếu nhập</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Danh sách phiếu nhập</a></li>
+                    <li class="breadcrumb-item active">Thêm mới</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Thông tin thêm mới</h3>
+        </div>
+        <div class="card-body">
+            @using (Html.BeginForm("Add", "PhieuNhap", FormMethod.Post, new { }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                <div class="form-group">
+                    <label for="TenPN">Tên phiếu nhập</label>
+                    @Html.TextBoxFor(x => x.TenPN, new { @class = "form-control", @placeholder = "Tên phiếu nhập" })
+                    @Html.ValidationMessageFor(x => x.TenPN, null, new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="Tongtien">Tổng tiền</label>
+                    @Html.TextBoxFor(x => x.Tongtien, new { @class = "form-control", @placeholder = "Tổng tiền", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(x => x.Tongtien, null, new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="NgayNhap">Ngày nhập</label>
+                    <input type="text" id="NgayNhap" class="form-control" placeholder="Ngày nhập" />
+                    @Html.ValidationMessageFor(x => x.NgayNhap, null, new { @class = "text-danger" })
+                </div>
+                @Html.Action("Partial_SanPham", "PhieuNhap")
+                <div class="form-group">
+                    <a href="/Admin/PhieuNhap" class="btn btn-danger">Quay lại</a>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            }
+        </div>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer"></div>
+    <!-- /.card-footer-->
+</section>
+<!-- /.content -->
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            let productIndex = 1;
+
+            $('#addProductRow').click(function () {
+                let newRow = `
+<tr>
+    <td>
+        <select name="ProductDetails[${productIndex}].MaSP" class="form-control product-dropdown">
+            <option>Chọn sản phẩm</option>
+            @foreach (var item in ViewBag.Products)
+            {
+                <option value="@item.MaSP" data-price="@item.GiaGoc">@item.TenSP</option>
+            }
+        </select>
+    </td>
+    <td><input type="number" name="ProductDetails[${productIndex}].SoLuong" class="form-control quantity" /></td>
+    <td><input type="number" name="ProductDetails[${productIndex}].GiaGoc" class="form-control price" readonly /></td>
+    <td><button type="button" class="btn btn-danger btn-remove">Xóa</button></td>
+</tr>`;
+                $('#productTable tbody').append(newRow);
+                productIndex++;
+            });
+
+            $(document).on('click', '.btn-remove', function () {
+                $(this).closest('tr').remove();
+                calculateTotal();
+            });
+
+            $(document).on('change', '.product-dropdown', function () {
+                let price = $(this).find('option:selected').data('price');
+                $(this).closest('tr').find('.price').val(price);
+                calculateTotal();
+            });
+
+            $(document).on('input', '.quantity', function () {
+                calculateTotal();
+            });
+
+            function calculateTotal() {
+                let total = 0;
+                $('#productTable tbody tr').each(function () {
+                    let quantity = $(this).find('.quantity').val();
+                    let price = $(this).find('.price').val();
+                    if (quantity && price) {
+                        total += (quantity * price);
+                    }
+                });
+                $('input[name="Tongtien"]').val(total);
+            }
+
+            // Handle form submission
+            $('#phieuNhapForm').submit(function (e) {
+                e.preventDefault();
+
+                let productData = [];
+                $('#productTable tbody tr').each(function () {
+                    let productId = $(this).find('.product-dropdown').val();
+                    let quantity = $(this).find('.quantity').val();
+                    let price = $(this).find('.price').val();
+                    productData.push({ MaSP: productId, SoLuong: quantity, GiaGoc: price });
+                });
+
+                // Serialize form data
+                let formData = $(this).serializeArray();
+                formData.push({ name: "SanPham", value: JSON.stringify(productData) });
+
+                // AJAX call to send product data to the controller
+                $.ajax({
+                    url: '/Admin/PhieuNhap/Add', // Update the URL to match your controller action
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        // Handle success response, e.g., redirect or display a success message
+                        window.location.href = "/Admin/PhieuNhap/Index"; // Redirect to index page
+                    },
+                    error: function (error) {
+                        // Handle error response
+                        alert("An error occurred while saving the data.");
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $("#NgayNhap").datepicker({});
+        });
+    </script>
+}
+

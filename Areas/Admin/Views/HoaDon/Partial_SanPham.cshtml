@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Webbanhangonline.Models.EF.CTHOADON>
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr align="center">
+                <th>Mã sản phẩm</th>
+                <th>Tên sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MaSP</td>
+                    <td>@item.TenSP</td>
+                    <td align="center">@Webbanhangonline.Common.Common.FormatNumber(item.Gia, 0)</td>
+                    <td align="center">@item.SoLuong</td>
+                    <td align="center">@Webbanhangonline.Common.Common.FormatNumber(item.Gia * item.SoLuong, 0)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
