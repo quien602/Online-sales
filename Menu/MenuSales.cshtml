@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Webbanhangonline.Models.EF.LoaiSanPham>
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        <div class="col text-center">
+            <div class="section_title new_arrivals_title">
+                <h2>Best Sellers</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="align-items: center; padding-left: 155px;">
+        <div class="col" style="align-items: center">
+            <div class="product-grid" style="align-items: center" data-isotope='{ "itemSelector": ".product-item", "layoutMode": "fitRows" }'>
+                @Html.Action("Partial_ItemsByCateSalesId", "Product")
+            </div>
+        </div>
+    </div>
+
+}

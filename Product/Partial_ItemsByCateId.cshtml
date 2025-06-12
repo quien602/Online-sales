@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Webbanhangonline.Models.EF.SanPham>
+
+<style>
+    .product-slider-container {
+        overflow: hidden;
+        width: 100%;
+        position: relative;
+        white-space: nowrap;
+    }
+
+    .product-slider {
+        display: flex;
+        transition: transform 0.5s linear;
+    }
+
+    .product-item {
+        flex: 0 0 auto;
+        padding: 10px;
+        box-sizing: border-box;
+        width: 200px; /* Adjust the width as needed */
+    }
+
+    .product-image {
+        max-width: 100%;
+    }
+
+    .product_name {
+        white-space: normal; /* Allow text to wrap */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* Show maximum 2 lines */
+        -webkit-box-orient: vertical;
+    }
+</style>
+
+@if (Model != null && Model.Any())
+{
+    <div class="product-slider-container" id="productSliderContainer">
+        <div class="product-slider" id="productSlider">
+            @foreach (var items in Model)
+            {
+                <div class="product-item @items.LoaiSanPham.Alias">
+                    <div class="product discount product_filter">
+                        <div class="product_image">
+                            <img src="@items.HinhAnh" alt="@items.TenSP" class="product-image">
+                        </div>
+                        <div class="favorite favorite_left"></div>
+                        <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span></span></div>
+                        <div class="product_info">
+                            <h6 class="product_name"><a href="/chi-tiet/@items.Alias">@items.TenSP</a></h6>
+                            @if (items.GiaKM > 0)
+                            {
+                                <div class="product_price">@Webbanhangonline.Common.Common.FormatNumber(items.GiaKM, 0)<span>@Webbanhangonline.Common.Common.FormatNumber(items.GiaBan, 0)</span></div>
+                            }
+                            else
+                            {
+                                <div class="product_price">@Webbanhangonline.Common.Common.FormatNumber(items.GiaBan, 0)</div>
+                            }
+                        </div>
+                    </div>
+                    <div class="red_button add_to_cart_button"><a href="#" class="btnAddtoCart" data-id="@items.MaSP">add to cart</a></div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const slider = document.getElementById('productSlider');
+        const items = slider.querySelectorAll('.product-item');
+        const itemWidth = items[0].offsetWidth;
+
+        // Duplicate the items for seamless scrolling
+        slider.innerHTML += slider.innerHTML;
+        const totalWidth = slider.scrollWidth / 2;
+
+        let scrollAmount = 0;
+
+        function autoScroll() {
+            scrollAmount++;
+            if (scrollAmount >= totalWidth) {
+                scrollAmount = 0;
+                slider.style.transform = 'translateX(0)';
+            } else {
+                slider.style.transform = 'translateX(-' + scrollAmount + 'px)';
+            }
+        }
+
+        setInterval(autoScroll, 20); // Adjust the interval for speed control
+    });
+</script>

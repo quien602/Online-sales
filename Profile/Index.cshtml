@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/assests/styles/cssinfo.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="~/Content/assests/styles/categories_styles.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assests/styles/categories_responsive.css">
+
+<section class="profile" style="">
+    <div class="container">
+        <div class="front side">
+            <div class="content">
+                <h1>Welcome</h1>
+                <h1 style="color: khaki; margin-top: 20px; text-shadow: 0 0 5px yellow, 0 0 10px yellow, 0 0 15px yellow;">@ViewBag.HoTen</h1>
+                <p>
+                    Full Name: @ViewBag.HoTen - Phone: @ViewBag.SoDienThoai
+                </p>
+            </div>
+        </div>
+        <div class="back side">
+            <div class="content">
+                <h3>Contact</h3>
+                <form>
+                    <label>Name :</label>
+                    <input type="text" placeholder="@ViewBag.HoTen">
+                    <label>Your E-mail :</label>
+                    <input type="text" placeholder="@ViewBag.Email">
+                    <label>Your Phone :</label>
+                    <input type="text" placeholder="@ViewBag.SoDienThoai">
+                    <input type="submit" value="Done">
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

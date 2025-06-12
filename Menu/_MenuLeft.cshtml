@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Webbanhangonline.Models.EF.LoaiSanPham>
+<style>
+    .sidebar_categories li {
+        width: 200px; /* Đặt kích thước mong muốn cho các mục, ví dụ: 100px */
+        height: 50px; /* Đặt chiều cao mong muốn cho các mục, ví dụ: 40px */
+    }
+</style>
+@if (Model != null && Model.Any())
+{
+    <div class="row align-items-center">
+        <div class="col text-center">
+            <div class="new_arrivals_sorting">
+                <ul class="sidebar_categories">
+                    <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center active is-checked" data-filter="*">Tất cả</li>
+                    @foreach (var items in Model)
+                    {
+                        <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center" data-filter=".@items.MaLSP">@items.TenLSP</li>
+
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}

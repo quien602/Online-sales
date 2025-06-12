@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Webbanhangonline.Models.EF.SanPham>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var items in Model)
+    {
+        <!-- Product 1 -->
+        <div class="product-item @items.LoaiSanPham.Alias">
+            <div class="product discount product_filter">
+                <div class="product_image">
+                    <img src="@items.HinhAnh" alt="@items.TenSP">
+                </div>
+                <div class="favorite favorite_left"></div>
+                @*<div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span></span></div>*@
+                <div class="product_info">
+                    <h6 class="product_name"><a href="/chi-tiet/@items.Alias">@items.TenSP</a></h6>
+                    @if (items.GiaKM > 0)
+                    {
+                        <div class="product_price">@Webbanhangonline.Common.Common.FormatNumber(items.GiaKM, 0)<span>@Webbanhangonline.Common.Common.FormatNumber(items.GiaBan, 0)</span></div>
+                    }
+                    else
+                    {
+                        <div class="product_price">@Webbanhangonline.Common.Common.FormatNumber(items.GiaBan, 0)</div>
+
+                    }
+                </div>
+            </div>
+            <div class="red_button add_to_cart_button"><a href="#" class="btnAddtoCart" data-id="@items.MaSP">add to cart</a></div>
+        </div>
+    }
+}

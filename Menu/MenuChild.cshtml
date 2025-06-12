@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Webbanhangonline.Models.EF.DANHMUC>
+@if (Model != null && Model.Any())
+{
+
+    foreach (var item in Model)
+    {
+        //if (item.Alias.Equals("trang-chu"))
+        //{
+        //    item.Alias = "";
+        //}
+        <li class="menu_item">
+            <a href="@item.Alias">@item.TenDM</a>
+        </li>
+
+
+    }
+
+}

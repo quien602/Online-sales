@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Webbanhangonline.Models.EF.LoaiSanPham>
+
+<style>
+    .banner_item {
+        position: relative;
+        overflow: hidden; /* Ensure child elements don't overflow */
+        perspective: 1000px; /* Add perspective for 3D effect */
+    }
+
+    .category-link {
+        position: relative;
+        display: inline-block;
+        text-decoration: none;
+        color: inherit;
+        overflow: hidden; /* Ensure the hover image does not overflow the link */
+    }
+
+    .hover-image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0%; /* Start with width and height at 0 */
+        height: 0%;
+        background-size: cover;
+        background-position: center;
+        transform: translate(-50%, -50%) scale(0); /* Start scaled down */
+        transition: transform 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out;
+        border-radius: 10px; /* Optionally, add border-radius */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Optionally, add shadow */
+    }
+
+    .category-link:hover .hover-image {
+        width: 200%; /* Expand to twice the size to cover the area */
+        height: 200%; /* Expand to twice the size to cover the area */
+        transform: translate(-50%, -50%) scale(1); /* Scale up on hover */
+    }
+</style>
+
+
+@if (Model != null && Model.Any())
+{
+    <div class="banner">
+        <div class="container">
+            <div class="row">
+                @foreach (var items in Model)
+                {
+                    var backgroundImage = !string.IsNullOrEmpty(items.BieuTuong) ? items.BieuTuong : "air.jpg"; // Provide a default image if BieuTuong is null or empty
+                    <div class="col-md-4">
+                        <div class="banner_item align-items-center" style="background-image:url('@backgroundImage')">
+                            <div class="banner_category">
+                                <a href="@items.Alias" class="category-link">
+                                    @items.TenLSP
+                                    <div class="hover-image" style="background-image:url('@backgroundImage')"></div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
