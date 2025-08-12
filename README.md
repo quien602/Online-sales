@@ -1,4 +1,4 @@
-<img width="797" height="348" alt="image" src="https://github.com/user-attachments/assets/441f49c0-c733-4c78-842d-9093ca9ee7ab" /># Online-sales
+# Online-sales
 Model the interfaces for both customers and administrators/staff during usage.
 Support payment methods integrated with e-commerce solutions.
 Enable intuitive interaction between customers and administrators/staff.
