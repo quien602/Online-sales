@@ -1,9 +1,14 @@
 # Online-sales
 Model the interfaces for both customers and administrators/staff during usage.
+
 Support payment methods integrated with e-commerce solutions.
+
 Enable intuitive interaction between customers and administrators/staff.
+
 Build separate login and registration systems for administrators and customers to enhance security and streamline store operations.
+
 Integrate multiple product and system management methods to optimize the customer experience.
+
 Incorporate e-commerce features into the system to stay aligned with modern information technology trends.
 
 
